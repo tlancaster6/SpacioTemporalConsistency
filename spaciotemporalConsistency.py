@@ -111,7 +111,8 @@ class STC:
             return dist_to_centroid
 
 
-trial_ = 'MC16_2'
-cluster_file_ = '/home/tlancaster6/PycharmProjects/cichlid-lab/data/{}/AllClusterData.csv'.format(trial_)
-stc_obj = STC(trial_, cluster_file_)
-data = stc_obj.plot_progression(iterations=10)
+# # use example
+# trial_ = 'MC16_2'
+# cluster_file_ = '/home/tlancaster6/PycharmProjects/cichlid-lab/data/{}/AllClusterData.csv'.format(trial_)
+# stc_obj = STC(trial_, cluster_file_)
+# data = stc_obj.plot_progression(iterations=10)
