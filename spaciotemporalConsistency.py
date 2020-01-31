@@ -33,7 +33,7 @@ class STC:
         self.cluster_file = cluster_file
         self.df = self._prep_cluster_data()
 
-    def plot_progression(self, min_min_gap=0.1, max_min_gap=600.0, iterations=50):
+    def plot_progression(self, min_min_gap=1, max_min_gap=600, step=1):
         """
         Plot various bout metrics against the minimum gap between bouts.
 
@@ -48,20 +48,17 @@ class STC:
         of minimum gap (ranging from min_min_gap to max_min_gap, logarithmically), and the results plotted.
 
         Parameters:
-            min_min_gap (float): smallest value (in seconds) to be used for the minimum gap between bouts
-            max_min_gap (float): largest number (in seconds) to be used for the minimum gap between bouts
-            iterations (int): number of data points to use. Higher numbers give higher resolution but decrease
-                performance
+            min_min_gap (int): smallest value (in seconds) to be used for the minimum gap between bouts
+            max_min_gap (int): largest number (in seconds) to be used for the minimum gap between bouts
+            step (int): step (in seconds) between values of min_gap
 
         Returns:
             df (pandas.DataFrame): dataframe of the numerical data used in plotting. Can be stored in a variable
                 and used for further analysis if desired
         """
-        min_min_gap = math.log(min_min_gap, 10)
-        max_min_gap = math.log(max_min_gap, 10)
         df = []
-        for i, min_gap in enumerate(np.logspace(min_min_gap, max_min_gap, iterations)):
-            print('Iterating:{}/{}'.format(i + 1, iterations), end='\r')
+        for i, min_gap in enumerate(range(min_min_gap, max_min_gap + step, step)):
+            print('Iterating:{}/{}'.format(i + 1, (max_min_gap + step - min_min_gap)//step), end='\r')
             df.append(self._return_bout_summary(min_gap))
         df = pd.concat(df)
         df.reset_index(inplace=True)
@@ -103,7 +100,7 @@ class STC:
         return summary
 
     def _return_dist_to_centroid(self, xy_series):
-        if len(xy_series) < 3:
+        if len(xy_series) < 2:
             return np.NaN
         else:
             centroid = np.nanmean([xy[0] for xy in xy_series]), np.nanmean([xy[1] for xy in xy_series])
@@ -111,8 +108,8 @@ class STC:
             return dist_to_centroid
 
 
-# # use example
-# trial_ = 'MC16_2'
-# cluster_file_ = '/home/tlancaster6/PycharmProjects/cichlid-lab/data/{}/AllClusterData.csv'.format(trial_)
-# stc_obj = STC(trial_, cluster_file_)
-# data = stc_obj.plot_progression(iterations=10)
+# use example
+trial_ = 'MC6_5'
+cluster_file_ = '/home/tlancaster6/PycharmProjects/cichlid-lab/data/{}/AllClusterData.csv'.format(trial_)
+stc_obj = STC(trial_, cluster_file_)
+data = stc_obj.plot_progression(min_min_gap=1, max_min_gap=600, step=1)
