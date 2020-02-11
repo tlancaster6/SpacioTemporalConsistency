@@ -71,8 +71,8 @@ class STC:
 
     def _prep_cluster_data(self):
         df = pd.read_csv(self.cluster_file, index_col='TimeStamp', parse_dates=True, infer_datetime_format=True,
-                         usecols=['TimeStamp', 'modelAll_18_pred', 'X_depth', 'Y_depth'], skip_blank_lines=True)
-        df.rename(columns={'modelAll_18_pred': 'bid', 'X_depth': 'X', 'Y_depth': 'Y'}, inplace=True)
+                         usecols=['TimeStamp', 'Model18_All_pred', 'X_depth', 'Y_depth'], skip_blank_lines=True)
+        df.rename(columns={'Model18_All_pred': 'bid', 'X_depth': 'X', 'Y_depth': 'Y'}, inplace=True)
         df = df[(df.bid == 'c') | (df.bid == 'p')].sort_index()
         df['elapsed_time'] = (df.index - df.index.min()).total_seconds()
         df.reset_index(inplace=True, drop=True)
@@ -109,7 +109,8 @@ class STC:
 
 
 # use example
+
 trial_ = 'MC6_5'
-cluster_file_ = '/home/tlancaster6/PycharmProjects/cichlid-lab/data/{}/AllClusterData.csv'.format(trial_)
+cluster_file_ = 'MC6_5_AllLabeledClusters.csv'
 stc_obj = STC(trial_, cluster_file_)
 data = stc_obj.plot_progression(min_min_gap=1, max_min_gap=600, step=1)
